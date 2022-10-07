@@ -7,7 +7,7 @@ using WebStock.Models;
 
 namespace WebStock.Controllers
 {
-    public class CategoryController : Controller//, IRepository<Category>
+    public class CategoryController : Controller
     {
         private readonly IRepository<Category> _repository;
         private readonly ApplicationDbContext _context;

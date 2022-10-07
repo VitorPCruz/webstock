@@ -11,6 +11,5 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
-    public DbSet<Address> Addresses { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
 }

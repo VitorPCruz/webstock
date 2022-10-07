@@ -2,7 +2,7 @@
 
 namespace WebStock.Intefaces;
 
-public interface IRepository<TEntity> : IDisposable where TEntity : Entity, new()
+public interface IRepository<TEntity> : IDisposable
 {
     Task<TEntity> GetById(Guid id);
     Task<List<TEntity>> GetAll();

@@ -2,6 +2,6 @@
 
 public enum SupplierType
 {
-    PhysicalPernson=1,
+    PhysicalPerson=1,
     LegalPerson
 }

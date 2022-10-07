@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Net.WebSockets;
 using WebStock.Data;
 using WebStock.Intefaces;
 using WebStock.Models;
-using WebStock.Models.Entities;
 
 namespace WebStock.Repository;
 
@@ -32,14 +30,11 @@ public class CategoryRepository : IRepository<Category>
             .FirstOrDefaultAsync(category => category.Id == categoryId);
 
         _dbcontext.Remove(category);
-
-        //await _dbcontext.SaveChangesAsync();
     }
 
     public async Task Update(Category category)
     {
         _dbcontext.Update(category);
-        //await _dbcontext.SaveChangesAsync();
     }
 
     public void Dispose()
