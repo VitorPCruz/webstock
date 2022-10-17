@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
+using WebStock.Interfaces;
 using WebStock.Models;
 
 namespace WebStock.Controllers
@@ -8,60 +9,60 @@ namespace WebStock.Controllers
     public class SupplierController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepository<Supplier> _repository;
 
-        public SupplierController(ApplicationDbContext context)
+
+        public SupplierController(IRepository<Supplier> repository, ApplicationDbContext context)
         {
             _context = context;
+            _repository = repository;
         }
 
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Suppliers.ToListAsync());
+              return View(await _repository.GetAllEntities());
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var supplier = await _repository.GetEntityById(id);
 
             if (supplier == null)
-            {
                 return NotFound();
-            }
 
             return View(supplier);
         }
 
-        public async Task<IActionResult> Register(Guid? id)
+        public async Task<IActionResult> Register(Guid id)
         {
-            if (!id.HasValue) 
+            var register = await _repository.GetEntityById(id);
+
+            if (register == null) 
                 return View();
 
-            return View(await _context.Suppliers.AsNoTracking().FirstAsync(s => s.Id == id)); 
+            return View(await _repository.GetEntityById(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Supplier supplier)
         {
-            var checkExist = await _context.Suppliers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == supplier.Id);
+            var register = await _repository.GetEntityById(supplier.Id);
             
-            if (!ModelState.IsValid)
-                return View(supplier);
+            if (!ModelState.IsValid) return View(supplier);
 
-            if (checkExist == null)
+            if (register == null)
             {
                 supplier.Id = Guid.NewGuid();
-                _context.Add(supplier);
+                _repository.AddEntity(supplier);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                _context.Suppliers.Update(supplier);
+            else 
+            { 
+                _repository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(Guid id)

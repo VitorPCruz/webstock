@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
 using WebStock.Data;
-using WebStock.Intefaces;
+using WebStock.Interfaces;
 using WebStock.Models;
 
 namespace WebStock.Controllers
@@ -20,7 +18,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Index()
         {
-              return View(await GetAll());
+              return View(await _repository.GetAllEntities());
         }
 
 
@@ -36,7 +34,7 @@ namespace WebStock.Controllers
             if (ModelState.IsValid)
             {
                 category.Id = Guid.NewGuid();
-                await _repository.Add(category);
+                await _repository.AddEntity(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -45,7 +43,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            return View(await GetById(id));
+            return View(await _repository.GetEntityById(id));
         }
 
         [HttpPost]
@@ -55,7 +53,7 @@ namespace WebStock.Controllers
             if (!ModelState.IsValid)
                 return View(category);
 
-            Update(category);
+            _repository.UpdateEntity(category);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -64,42 +62,16 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            return View(await GetById(id));
+            return View(await _repository.GetEntityById(id));
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await Delete(id);
+            await _repository.DeleteEntityById(id);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<Category> GetById(Guid id)
-        {
-           return await _context.Categories
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
-        }
-
-        public async Task<List<Category>> GetAll()
-        {
-            return await _context.Categories
-                .AsNoTracking()
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-        }
-
-        public async Task DeleteById(Guid id)
-        {
-            await _repository.Delete(id);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Update(Category entity)
-        {
-            await _repository.Update(entity);
-            await _context.SaveChangesAsync();
         }
     }
 }

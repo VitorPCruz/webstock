@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
-using WebStock.Intefaces;
+using WebStock.Interfaces;
 using WebStock.Models;
 using WebStock.Repository;
 
@@ -21,6 +21,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
+builder.Services.AddScoped<IRepository<Supplier>, SupplierRepository>();
+
+
 
 var app = builder.Build();
 
