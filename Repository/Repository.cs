@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models.Entities;
@@ -33,17 +34,18 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
     public virtual async Task DeleteEntityById(Guid id)
     {
-        _dbSet.Remove(await _dbSet.FindAsync(id));
+        _dbSet.Remove(new TEntity { Id = id });
 
     }
 
     public virtual async Task UpdateEntity(TEntity entity)
     {
-        _dbSet.Update(entity);
+         _dbcontext.ChangeTracker.Clear();
+         _dbSet.Update(entity);
     }
 
     public void Dispose()
     {
-        _dbcontext.Dispose();
+        _dbcontext?.Dispose();
     }
 }

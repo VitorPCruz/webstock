@@ -27,8 +27,7 @@ namespace WebStock.Controllers
         {
             var supplier = await _repository.GetEntityById(id);
 
-            if (supplier == null)
-                return NotFound();
+            if (supplier == null) return NotFound();
 
             return View(supplier);
         }
@@ -37,8 +36,7 @@ namespace WebStock.Controllers
         {
             var register = await _repository.GetEntityById(id);
 
-            if (register == null) 
-                return View();
+            if (register == null) return View();
 
             return View(await _repository.GetEntityById(id));
         }
@@ -54,46 +52,24 @@ namespace WebStock.Controllers
             if (register == null)
             {
                 supplier.Id = Guid.NewGuid();
+
                 _repository.AddEntity(supplier);
                 await _context.SaveChangesAsync();
             }
-            else 
+            else
             { 
                 _repository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var supplier = await _context.Suppliers.FindAsync(id);
-            return View(nameof(Register), supplier);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Supplier supplier)
-        {
-            if (!ModelState.IsValid)
-                return View(supplier);
-           
-            _context.Update(supplier);
-            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+
         }
 
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (supplier == null)
-            {
-                return NotFound();
-            }
-
+            var supplier = await _repository.GetEntityById(id);
+            if (supplier == null) return NotFound();
             return View(supplier);
         }
 
@@ -101,13 +77,7 @@ namespace WebStock.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var supplier = await _context.Suppliers.FindAsync(id);
-
-            if (supplier != null)
-            {
-                _context.Suppliers.Remove(supplier);
-            }
-            
+            _repository.DeleteEntityById(id);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
