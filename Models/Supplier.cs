@@ -20,7 +20,7 @@ public class Supplier : Entity
     [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 5)]
     public string Email { get; set; }
 
-    [DisplayName("Type")]
+    [DisplayName("Supplier Type")]
     [Required(ErrorMessage = "The field '{0}' is required")]
     public SupplierType SupplierType { get; set; }
 

@@ -22,6 +22,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Supplier>, SupplierRepository>();
+builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
+
 
 
 

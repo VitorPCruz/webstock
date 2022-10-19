@@ -20,3 +20,8 @@ body {
 a {
     text-decoration: none; /* no underline */
 }
+
+.ModelDescription {
+    text-align: justify;
+    text-justify: inter-word;
+}

@@ -1,7 +1,12 @@
-﻿namespace WebStock.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebStock.Models;
 
 public enum SupplierType
 {
+    [Display(Name = "Physical Person")]
     PhysicalPerson=1,
-    LegalPerson
+
+    [Display(Name = "Legal Person")]
+    LegalPerson = 2
 }
