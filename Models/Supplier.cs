@@ -6,8 +6,6 @@ namespace WebStock.Models;
 
 public class Supplier : Entity
 {
-    // public Guid AddressId { get; set; }
-
     [Required(ErrorMessage = "The field '{0}' is required")]
     [StringLength(200, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
     public string Name { get; set; }
@@ -26,35 +24,8 @@ public class Supplier : Entity
     [Required(ErrorMessage = "The field '{0}' is required")]
     public SupplierType SupplierType { get; set; }
 
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(200, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
-    public string Street { get; set; }
+    [DisplayName("Active?")]
+    public bool Active { get; set; }
 
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(5, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 1)]
-    public string Number { get; set; }
-
-    [StringLength(300, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 4)]
-    public string? Complement { get; set; }
-
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
-    public string Neighborhood { get; set; }
-
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(8, ErrorMessage = "The field '{0}' must be {1} characters", MinimumLength = 8)]
-    public string ZipCode { get; set; }
-
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(50, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
-    public string City { get; set; }
-
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(2, ErrorMessage = "The field '{0}' must be {1} characters")]
-    public string State { get; set; }
-    public IEnumerable<Product>? Products { get; set; }
-
-    //public DateTime CreatedAt { get; set; }
-    //public DateTime ModifiedAt { get; set; }
-
+    public IEnumerable<Product> Products { get; set; }
 }

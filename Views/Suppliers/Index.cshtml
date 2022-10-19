@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Register" class="btn btn-info">New Supplier</a>
+    <a asp-action="Register">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -24,7 +24,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.SupplierType)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -44,9 +47,12 @@
                     @Html.DisplayFor(modelItem => item.SupplierType)
                 </td>
                 <td>
-                    <a asp-action="Register" asp-route-id="@item.Id" class="btn btn-warning fa-solid fa-pen-to-square"/>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info fa-solid fa-magnifying-glass"/>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger fa-solid fa-trash"/>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    <a asp-action="Register" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" type="submit">Delete</a>
                 </td>
             </tr>
         }

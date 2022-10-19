@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using WebStock.Models.Entities;
 
 namespace WebStock.Models;
@@ -9,4 +10,9 @@ public class Category : Entity
     [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters",
         MinimumLength = 2)]
     public string Name { get; set; }
+
+    [DisplayName("Active?")]
+    public bool Active { get; set; }
+
+    //public Product Product { get; set; }
 }

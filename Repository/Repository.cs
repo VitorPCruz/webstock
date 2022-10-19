@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models.Entities;

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebStock.Data;
 
@@ -10,9 +11,10 @@ using WebStock.Data;
 namespace WebStock.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221019093642_RemodelandoClassesERelacionamentos")]
+    partial class RemodelandoClassesERelacionamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -268,7 +270,8 @@ namespace WebStock.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.HasIndex("SupplierId");
 
@@ -280,9 +283,6 @@ namespace WebStock.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Document")
                         .IsRequired()
@@ -361,8 +361,8 @@ namespace WebStock.Data.Migrations
             modelBuilder.Entity("WebStock.Models.Product", b =>
                 {
                     b.HasOne("WebStock.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .WithOne("Product")
+                        .HasForeignKey("WebStock.Models.Product", "CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -375,6 +375,12 @@ namespace WebStock.Data.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("WebStock.Models.Category", b =>
+                {
+                    b.Navigation("Product")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebStock.Models.Supplier", b =>
