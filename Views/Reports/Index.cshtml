@@ -1,0 +1,25 @@
+﻿@model IEnumerable<WebStock.Models.Report>
+
+@{
+    ViewData["Title"] = "History";
+}
+
+<h1>History from Storage</h1>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>Last products updates</th>
+        </tr>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.ProductQuantity of @item.Product.Name was @item.Operation at @item.Moment
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </thead>
+</table>

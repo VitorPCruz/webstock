@@ -18,7 +18,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
     public virtual async Task<TEntity> GetEntityById(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public virtual async Task<List<TEntity>> GetAllEntities()
@@ -40,6 +40,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     public virtual async Task UpdateEntity(TEntity entity)
     {
          _dbcontext.ChangeTracker.Clear();
+        //_dbSet.Attach(entity);
          _dbSet.Update(entity);
     }
 

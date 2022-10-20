@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebStock.Data;
 
@@ -10,9 +11,10 @@ using WebStock.Data;
 namespace WebStock.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020155642_MudandoStorageParaReport")]
+    partial class MudandoStorageParaReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -284,9 +286,6 @@ namespace WebStock.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Moment")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Operation")
                         .HasColumnType("INTEGER");
 
@@ -301,9 +300,10 @@ namespace WebStock.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
-                    b.ToTable("Reports");
+                    b.ToTable("Storage");
                 });
 
             modelBuilder.Entity("WebStock.Models.Supplier", b =>
@@ -411,12 +411,17 @@ namespace WebStock.Data.Migrations
             modelBuilder.Entity("WebStock.Models.Report", b =>
                 {
                     b.HasOne("WebStock.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                        .WithOne("Storage")
+                        .HasForeignKey("WebStock.Models.Report", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebStock.Models.Product", b =>
+                {
+                    b.Navigation("Storage");
                 });
 
             modelBuilder.Entity("WebStock.Models.Supplier", b =>

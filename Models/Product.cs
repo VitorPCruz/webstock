@@ -28,7 +28,8 @@ public class Product : Entity
     [DisplayName("Active?")]
     public bool Active { get; set; }
 
+    public int Quantity { get; set; }
+
     public Supplier Supplier { get; set; }
     public Category Category { get; set; }
-
 }

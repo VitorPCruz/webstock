@@ -23,8 +23,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Supplier>, SupplierRepository>();
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
-
-
+builder.Services.AddScoped<IRepository<Report>, ReportRepository>();
 
 
 var app = builder.Build();

@@ -9,18 +9,17 @@ namespace WebStock.Controllers
     public class SuppliersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IRepository<Supplier> _repositorySupplier;
-
+        private readonly IRepository<Supplier> _supplierRepository;
 
         public SuppliersController(ApplicationDbContext context, IRepository<Supplier> repository)
         {
             _context = context;
-            _repositorySupplier = repository;
+            _supplierRepository = repository;
         }
 
         public async Task<IActionResult> Index()
         {
-              return View(await _repositorySupplier.GetAllEntities());
+              return View(await _supplierRepository.GetAllEntities());
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -36,7 +35,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Register(Guid id)
         {
-            var register = await _repositorySupplier.GetEntityById(id);
+            var register = await _supplierRepository.GetEntityById(id);
             if (register == null)
                 return View();
 
@@ -50,17 +49,17 @@ namespace WebStock.Controllers
             if (!ModelState.IsValid)
                 return View(supplier);
 
-            var register = await _repositorySupplier.GetEntityById(supplier.Id);
+            var register = await _supplierRepository.GetEntityById(supplier.Id);
 
             if (register == null)
             {
                 supplier.Id = Guid.NewGuid();
-                _repositorySupplier.AddEntity(supplier);
+                _supplierRepository.AddEntity(supplier);
                 await _context.SaveChangesAsync();
             }
             else
             {
-                _repositorySupplier.UpdateEntity(supplier);
+                _supplierRepository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
@@ -68,7 +67,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var register = await _repositorySupplier.GetEntityById(id);
+            var register = await _supplierRepository.GetEntityById(id);
             
             if (register == null)
                 return NotFound();

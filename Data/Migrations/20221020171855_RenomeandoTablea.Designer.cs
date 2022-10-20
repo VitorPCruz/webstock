@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebStock.Data;
 
@@ -10,9 +11,10 @@ using WebStock.Data;
 namespace WebStock.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020171855_RenomeandoTablea")]
+    partial class RenomeandoTablea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -284,9 +286,6 @@ namespace WebStock.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Moment")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Operation")
                         .HasColumnType("INTEGER");
 
@@ -303,7 +302,7 @@ namespace WebStock.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Report");
                 });
 
             modelBuilder.Entity("WebStock.Models.Supplier", b =>

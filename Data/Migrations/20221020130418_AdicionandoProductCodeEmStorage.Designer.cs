@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebStock.Data;
 
@@ -10,9 +11,10 @@ using WebStock.Data;
 namespace WebStock.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020130418_AdicionandoProductCodeEmStorage")]
+    partial class AdicionandoProductCodeEmStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -263,9 +265,6 @@ namespace WebStock.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("TEXT");
 
@@ -278,32 +277,26 @@ namespace WebStock.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WebStock.Models.Report", b =>
+            modelBuilder.Entity("WebStock.Models.Storage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Moment")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Operation")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ProductCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductQuantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Storage");
                 });
 
             modelBuilder.Entity("WebStock.Models.Supplier", b =>
@@ -408,13 +401,11 @@ namespace WebStock.Data.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("WebStock.Models.Report", b =>
+            modelBuilder.Entity("WebStock.Models.Storage", b =>
                 {
                     b.HasOne("WebStock.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });

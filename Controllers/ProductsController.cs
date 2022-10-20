@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
+using WebStock.Repository;
 
 namespace WebStock.Controllers
 {
@@ -10,11 +12,13 @@ namespace WebStock.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Report> _reportRepository;
 
-        public ProductsController(ApplicationDbContext context, IRepository<Product> repositoryProduct)
+        public ProductsController(ApplicationDbContext context, IRepository<Product> productRepository, IRepository<Report> reportRepository)
         {
             _context = context;
-            _productRepository = repositoryProduct;
+            _productRepository = productRepository;
+            _reportRepository = reportRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -43,10 +47,14 @@ namespace WebStock.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
+            product.Quantity = 0;
             if (!ModelState.IsValid) return View(product);
 
             product.Id = Guid.NewGuid();
+
             _productRepository.AddEntity(product);
+            _reportRepository.AddEntity(new Report(product, Operation.Added));
+            
             await _context.SaveChangesAsync();
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
@@ -102,5 +110,6 @@ namespace WebStock.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

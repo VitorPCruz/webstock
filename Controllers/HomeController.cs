@@ -1,21 +1,25 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using WebStock.Interfaces;
 using WebStock.Models;
+using WebStock.Repository;
 
 namespace WebStock.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IRepository<Report> _reportRepository;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IRepository<Report> reportRepository)
     {
         _logger = logger;
+        _reportRepository = reportRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        return View("../Reports/Index", await _reportRepository.GetAllEntities());
     }
 
     public IActionResult Privacy()
