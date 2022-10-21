@@ -24,14 +24,14 @@ public class ProductRepository : Repository<Product>, IRepository<Product>
             .ToListAsync();
     }
 
-    //public async Task<Product> GetProductByProductCode(string productCode)
-    //{
-    //    return await _dbSet.FirstOrDefaultAsync(x => x.ProductCode == productCode);
-    //}
+    public async Task<Product> GetProductByProductCode(string productCode)
+    {
+        return await _dbSet.FirstOrDefaultAsync(x => x.ProductCode == productCode);
+    }
 
-    //public async Task<Product> GetProductByCodeBar(string codeBar)
-    //{
-    //    return await _dbSet.AsNoTracking()
-    //        .FirstOrDefaultAsync(x => x.CodeBar == codeBar);
-    //}
+    public async Task<Product> GetProductByCodeBar(string codeBar)
+    {
+        return await _dbSet.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.CodeBar == codeBar);
+    }
 }

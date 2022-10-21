@@ -9,17 +9,25 @@
 <table class="table">
     <thead class="table-dark">
         <tr>
-            <th>Last products updates</th>
+            <th>Moment</th>
+            <th>Name</th>
+            <th>Operation</th>
+            <th>Qnt Op.</th>
+            <th>Before Op.</th>
+            <th>After Oper.</th>
         </tr>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @item.ProductQuantity of @item.Product.Name was @item.Operation at @item.Moment
-                    </td>
-                </tr>
-            }
-        </tbody>
     </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Moment.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.Product.Name</td>
+                <td>@item.Operation</td>
+                <th>@item.OperationQuantity</th>
+                <th>@item.BeforeOperation</th>
+                <th>@item.AfterOperation</th>
+            </tr>
+        }
+    </tbody>
 </table>

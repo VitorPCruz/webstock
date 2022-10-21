@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
-using WebStock.Repository;
 
 namespace WebStock.Controllers
 {
@@ -12,12 +10,17 @@ namespace WebStock.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<Report> _reportRepository;
 
-        public ProductsController(ApplicationDbContext context, IRepository<Product> productRepository, IRepository<Report> reportRepository)
+        public ProductsController(ApplicationDbContext context, 
+                                  IRepository<Product> productRepository,
+                                  IRepository<Category> categoryRepository,
+                                  IRepository<Report> reportRepository)
         {
             _context = context;
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
             _reportRepository = reportRepository;
         }
 
@@ -38,8 +41,8 @@ namespace WebStock.Controllers
 
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories.Where(x => x.Active == true), "Id", "Name");
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers.Where(x => x.Active == true), "Id", "Name");
             return View();
         }
 
@@ -47,13 +50,12 @@ namespace WebStock.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            product.Quantity = 0;
             if (!ModelState.IsValid) return View(product);
 
             product.Id = Guid.NewGuid();
 
             _productRepository.AddEntity(product);
-            _reportRepository.AddEntity(new Report(product, Operation.Added));
+            _reportRepository.AddEntity(new Report(product, Operation.Added, product.Quantity, 0));
             
             await _context.SaveChangesAsync();
 
@@ -64,6 +66,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
+            DefineAvailableEntities();
             var product = await _productRepository.GetEntityById(id);
 
             if (product == null) return NotFound();
@@ -80,8 +83,28 @@ namespace WebStock.Controllers
             if (id != product.Id) return NotFound();
 
             if (!ModelState.IsValid) return View(product);
-         
+
+            var oldProduct = await _productRepository.GetEntityById(id);
+
+            Operation operation;
+            var difference = 0;
+
+            if (product.Quantity > oldProduct.Quantity)
+            {
+                operation = Operation.Added;
+                difference = product.Quantity - oldProduct.Quantity;
+            }
+            else
+            {
+                operation = Operation.Removed;
+                difference = oldProduct.Quantity - product.Quantity;
+            }
+
+            var report = new Report(product, operation, difference, oldProduct.Quantity);
+
             _productRepository.UpdateEntity(product);
+            _reportRepository.AddEntity(report);
+
             await _context.SaveChangesAsync();
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
@@ -111,5 +134,10 @@ namespace WebStock.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private void DefineAvailableEntities()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories.Where(x => x.Active == true), "Id", "Name");
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers.Where(x => x.Active == true), "Id", "Name");
+        }
     }
 }

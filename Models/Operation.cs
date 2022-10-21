@@ -4,4 +4,5 @@ public enum Operation
 {
     Added=1,
     Removed,
+    Updated
 }
