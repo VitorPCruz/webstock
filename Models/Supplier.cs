@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using WebStock.Models.Entities;
 
+
 namespace WebStock.Models;
 
 public class Supplier : Entity

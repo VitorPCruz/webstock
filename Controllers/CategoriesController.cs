@@ -70,7 +70,7 @@ namespace WebStock.Controllers
             var category = await _repositoryCategory.GetEntityById(id);
 
             if (category != null)
-                _context.Categories.Remove(category);
+                _repositoryCategory.DeleteEntityById(id);
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

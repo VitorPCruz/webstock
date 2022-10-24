@@ -28,6 +28,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
     public virtual async Task AddEntity(TEntity entity)
     {
+        //_dbcontext.Entry(entity).State = EntityState.Unchanged;
         _dbSet.Add(entity);
     }
 

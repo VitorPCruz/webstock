@@ -6,15 +6,16 @@
 
 <h1>History from Storage</h1>
 
-<table class="table">
+<table class="table table-striped table-bordered ">
     <thead class="table-dark">
         <tr>
-            <th>Moment</th>
-            <th>Name</th>
-            <th>Operation</th>
-            <th>Qnt Op.</th>
-            <th>Before Op.</th>
-            <th>After Oper.</th>
+            <th scope="col">Moment</th>
+            <th scope="col">Name</th>
+            <th scope="col">Product Code</th>
+            <th scope="col">Operation</th>
+            <th scope="col" class="columnsAlignEnd">Qnt Op.</th>
+            <th scope="col" class="columnsAlignEnd">Before Op.</th>
+            <th scope="col" class="columnsAlignEnd">After Oper.</th>
         </tr>
     </thead>
     <tbody>
@@ -22,11 +23,12 @@
         {
             <tr>
                 <td>@item.Moment.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@item.Product.Name</td>
+                <td>@item.ProductName</td>
+                <td>@item.ProductCode</td>
                 <td>@item.Operation</td>
-                <th>@item.OperationQuantity</th>
-                <th>@item.BeforeOperation</th>
-                <th>@item.AfterOperation</th>
+                <td class="columnsAlignEnd">@item.OperationQuantity</td>
+                <td class="columnsAlignEnd">@item.BeforeOperation</td>
+                <td class="columnsAlignEnd">@item.AfterOperation</td>
             </tr>
         }
     </tbody>

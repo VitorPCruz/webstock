@@ -13,7 +13,6 @@ public class ReportRepository : Repository<Report>, IRepository<Report>
     public override async Task<List<Report>> GetAllEntities()
     {
         return await _dbSet.AsNoTracking()
-            .Include(x => x.Product)
             .OrderByDescending(x => x.Moment)
             .ToListAsync();
     }

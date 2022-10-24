@@ -25,3 +25,7 @@ a {
     text-align: justify;
     text-justify: inter-word;
 }
+
+.columnsAlignEnd {
+    text-align: end;
+}

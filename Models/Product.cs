@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Configuration;
-using System.Reflection;
 using WebStock.Models.Entities;
 
 namespace WebStock.Models;
@@ -10,10 +9,12 @@ namespace WebStock.Models;
 public class Product : Entity
 {
     [DisplayName("Supplier")]
-    public Guid SupplierId { get; set; }
+    [ForeignKey("Supplier")]
+    public Guid? SupplierId { get; set; }
 
     [DisplayName("Category")]
-    public Guid CategoryId { get; set; }
+    [ForeignKey("Category")]
+    public Guid? CategoryId { get; set; }
 
     [Required(ErrorMessage = "The field '{0}' is required")]
     [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
@@ -38,7 +39,7 @@ public class Product : Entity
     [Required(ErrorMessage = "The field '{0}' is required")]
     [Range(minimum: 1, maximum: int.MaxValue)]
     public int Quantity { get; set; }
-
-    public Supplier Supplier { get; set; }
-    public Category Category { get; set; }
+    
+    public Supplier? Supplier { get; set; }
+    public Category? Category { get; set; }
 }
