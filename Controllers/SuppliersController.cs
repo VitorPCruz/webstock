@@ -6,7 +6,7 @@ using WebStock.Models;
 
 namespace WebStock.Controllers
 {
-    public class SuppliersController : Controller
+    public class SuppliersController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IRepository<Supplier> _supplierRepository;
@@ -24,8 +24,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var supplier = await _supplierRepository.GetEntityById(id);
 
             if (supplier == null)
                 return NotFound();
@@ -36,6 +35,7 @@ namespace WebStock.Controllers
         public async Task<IActionResult> Register(Guid id)
         {
             var register = await _supplierRepository.GetEntityById(id);
+
             if (register == null)
                 return View();
 
@@ -47,7 +47,12 @@ namespace WebStock.Controllers
         public async Task<IActionResult> Register(Supplier supplier)
         {
             if (!ModelState.IsValid)
-                return View(supplier);
+            {
+                TempData["notification"] = Notification
+                    .ToSerial("Please, check the fields.", NotificationType.Error);
+
+                return RedirectToAction(nameof(Register));
+            }
 
             var register = await _supplierRepository.GetEntityById(supplier.Id);
 
@@ -55,11 +60,16 @@ namespace WebStock.Controllers
             {
                 supplier.Id = Guid.NewGuid();
                 _supplierRepository.AddEntity(supplier);
+
+                TempData["notification"] = Notification.ToSerial("Supplier registered.");
                 await _context.SaveChangesAsync();
             }
-            else
+            
+            if (register != null && !supplier.Equals(register))
             {
                 _supplierRepository.UpdateEntity(supplier);
+
+                TempData["notification"] = Notification.ToSerial("Supplier updated.");
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
@@ -79,16 +89,18 @@ namespace WebStock.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Suppliers == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Suppliers'  is null.");
-            }
             var supplier = await _context.Suppliers.FindAsync(id);
             if (supplier != null)
             {
                 _context.Suppliers.Remove(supplier);
+                TempData["notification"] = Notification.ToSerial("Supplier removed.");
             }
-            
+            else 
+            {
+                TempData["notification"] = Notification.ToSerial("Not is possible get the supplier.", 
+                    NotificationType.Error);
+            }
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

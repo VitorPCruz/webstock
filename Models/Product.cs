@@ -42,4 +42,20 @@ public class Product : Entity
     
     public Supplier? Supplier { get; set; }
     public Category? Category { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Product product &&
+               Id.Equals(product.Id) &&
+               EqualityComparer<Guid?>.Default.Equals(SupplierId, product.SupplierId) &&
+               EqualityComparer<Guid?>.Default.Equals(CategoryId, product.CategoryId) &&
+               Name == product.Name &&
+               CodeBar == product.CodeBar &&
+               ProductCode == product.ProductCode &&
+               Description == product.Description &&
+               Active == product.Active &&
+               Quantity == product.Quantity &&
+               EqualityComparer<Supplier>.Default.Equals(Supplier, product.Supplier) &&
+               EqualityComparer<Category>.Default.Equals(Category, product.Category);
+    }
 }

@@ -24,14 +24,14 @@ a {
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid;
 }
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .25);
 }
 
 button.accept-policy {
@@ -40,9 +40,15 @@ button.accept-policy {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    background: #222;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    text-shadow: 2px 2px 2px #444;
+}
+
+.fa-heart {
+    color: red;
 }

@@ -29,3 +29,21 @@ a {
 .columnsAlignEnd {
     text-align: end;
 }
+
+.fa-circle-check, .fa-circle-xmark {
+    font-size: 20px;
+}
+
+.fa-circle-check {
+    color: rgba(85, 215, 30);
+}
+
+.fa-circle-xmark {
+    color: rgb(215, 3, 3);
+}
+
+
+.title {
+    font-size: 35px;
+    color: black;
+}

@@ -29,4 +29,16 @@ public class Supplier : Entity
     public bool Active { get; set; }
 
     public IEnumerable<Product> Products { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Supplier supplier &&
+               Id.Equals(supplier.Id) &&
+               Name == supplier.Name &&
+               Document == supplier.Document &&
+               Email == supplier.Email &&
+               SupplierType == supplier.SupplierType &&
+               Active == supplier.Active &&
+               EqualityComparer<IEnumerable<Product>>.Default.Equals(Products, supplier.Products);
+    }
 }

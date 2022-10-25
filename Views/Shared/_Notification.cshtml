@@ -1,0 +1,23 @@
+﻿@if (TempData.ContainsKey("notification"))
+{
+    var notification = Notification.Unserialize(TempData["notification"].ToString());
+
+    @if(notification.Type == NotificationType.Error) {
+        <div class="alert alert-danger mt-3 alert-dismissible fade show" role="alert">
+            @notification.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    else if (notification.Type == NotificationType.Warning) {
+        <div class="alert alert-warning mt-3 alert-dismissible fade show" role="alert">
+            @notification.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    else {
+        <div class="alert alert-success mt-3 alert-dismissible fade show" role="alert">
+            @notification.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+}

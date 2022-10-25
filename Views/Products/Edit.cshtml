@@ -1,19 +1,22 @@
 ﻿@model WebStock.Models.Product
+@{
+    ViewData["Title"] = "Edit Product";
+}
 
-<h4>Product</h4>
+<p class="title">@ViewData["Title"] - @Model.Name</p>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SupplierId" class="control-label"></label>
-                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                <select asp-for="SupplierId" class="form-select" asp-items="ViewBag.SupplierId"></select>
                 <span asp-validation-for="SupplierId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,29 +36,31 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea cols="50" rows="6" asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.DisplayNameFor(model => model.Active)
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Active" /> 
+                </label>
             </div>
+            <input type="hidden" asp-for="Id" />
+        <div class="row mb-3">
+            <div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-dark">Back to List</a>
+                </div>
+            </div>
+        </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

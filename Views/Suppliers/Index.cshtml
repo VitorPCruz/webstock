@@ -1,36 +1,41 @@
 ﻿@model IEnumerable<WebStock.Models.Supplier>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Suppliers";
 }
 
-<h1>Index</h1>
-
+<p class="title">List of Suppliers</p>
+<hr />
+<div>
+    <h4>
+        @ViewData["Title"] Registered: @Model.Count()
+    </h4>
+</div>
 <p>
-    <a asp-action="Register">Create New</a>
+    <a asp-action="Register" class="btn btn-info">New Supplier</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-hover table-striped table-bordered">
+    <thead class="table-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Document)
+                Document
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                E-mail
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
+            <th class="text-center">
+                Active?
             </th>
-            <th>Actions</th>
+            <th class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="align-middle">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -40,13 +45,19 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Active)
+                <td class="text-center">
+                    @if (item.Active == true)
+                    {
+                        <span><i class="fa-sharp fa-solid fa-circle-check"></i></span>
+                    }
+                    else
+                    {
+                        <span><i class="fa-solid fa-circle-xmark"></i></span>
+                    }
                 </td>
-                <td>
-                    <a asp-action="Register" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" type="submit">Delete</a>
+                <td class="text-center">
+                    <a asp-action="Register" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details"><i class="fa-solid fa-magnifying-glass"></i></a>
                 </td>
             </tr>
         }

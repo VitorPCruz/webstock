@@ -39,10 +39,17 @@
             Is Active?
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Active)
+            @if (Model.Active == true)
+            {
+                <span><i class="fa-sharp fa-solid fa-circle-check"></i></span>
+            }
+            else
+            {
+                <span><i class="fa-solid fa-circle-xmark"></i></span>
+            }
         </dd>
         <dt class = "col-sm-2">
-            Quantity Available:
+            Quantity Ava.:
         </dt>
         <dd class = "col-sm-10">
             @Model.Quantity
@@ -75,7 +82,30 @@
         </dd>
     </dl>
 </div>
+<hr />
+<h4>Actions</h4>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <dl class="row">
+        <dt class="col-sm-4 align-middle">
+            Do you want edit the register?
+        </dt>
+        <dd class="col-sm-8 align-middle">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+        </dd>
+        <dt class="col-sm-4 align-middle">
+            Do you want delete the register?
+        </dt>
+        <dd class="col-sm-8 align-middle">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </form>
+        </dd>
+        <dt class="col-sm-4 align-middle">
+            Return to index?
+        </dt>
+        <dd class="col-sm-8 align-middle">
+            <a asp-action="Index" class="btn btn-dark">Back to List</a>
+        </dd>
+    </dl>
 </div>

@@ -14,5 +14,11 @@ public class Category : Entity
     [DisplayName("Active?")]
     public bool Active { get; set; }
 
-    //public Product Product { get; set; }
+    public override bool Equals(object obj)
+    {
+        return obj is Category category &&
+               Id.Equals(category.Id) &&
+               Name == category.Name &&
+               Active == category.Active;
+    }
 }
