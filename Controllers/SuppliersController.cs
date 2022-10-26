@@ -73,6 +73,13 @@ namespace WebStock.Controllers
             }
 
             var register = await _supplierRepository.GetEntityById(supplier.Id);
+            
+            if (await _supplierRepository.CheckDocument(supplier.Document))
+            {
+                TempData["notification"] = Notification
+                    .SendNotification("A same document already registered.", NotificationType.Warning);
+                return RedirectToAction(nameof(Register));
+            }
 
             if (register == null)
             {
