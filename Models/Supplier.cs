@@ -12,7 +12,7 @@ public class Supplier : Entity
     public string Name { get; set; }
 
     [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(14, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 11)]
+    [StringLength(18, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 14)]
     public string Document { get; set; }
 
     [DisplayName("E-mail")]

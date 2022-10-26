@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Data.Common;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
+using WebStock.Utils;
 
 namespace WebStock.Controllers
 {
@@ -21,7 +27,7 @@ namespace WebStock.Controllers
 
         public async Task<IActionResult> Index()
         {
-              return View(await _supplierRepository.GetAllEntities());
+            return View(await _supplierRepository.GetAllEntities());
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -56,6 +62,16 @@ namespace WebStock.Controllers
                 return RedirectToAction(nameof(Register));
             }
 
+            var message = ValidateDocumentAndSupplierType(supplier);
+
+            if (message.Length > 0)
+            {
+                TempData["notification"] = Notification
+                    .SendNotification(message, NotificationType.Error);
+
+                return RedirectToAction(nameof(Register));
+            }
+
             var register = await _supplierRepository.GetEntityById(supplier.Id);
 
             if (register == null)
@@ -66,7 +82,7 @@ namespace WebStock.Controllers
                 TempData["notification"] = Notification.SendNotification("Supplier registered.");
                 await _context.SaveChangesAsync();
             }
-            
+
             if (register != null && !supplier.Equals(register))
             {
                 _supplierRepository.UpdateEntity(supplier);
@@ -80,7 +96,7 @@ namespace WebStock.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var register = await _supplierRepository.GetEntityById(id);
-            
+
             if (register == null)
                 return NotFound();
 
@@ -95,16 +111,34 @@ namespace WebStock.Controllers
             if (supplier != null)
             {
                 _context.Suppliers.Remove(supplier);
-                TempData["notification"] = Notification.SendNotification("Supplier removed.");
+                TempData["notification"] = Notification
+                    .SendNotification("Supplier removed.");
             }
-            else 
+            else
             {
-                TempData["notification"] = Notification.SendNotification("Not is possible get the supplier.", 
-                    NotificationType.Error);
+                TempData["notification"] = Notification
+                    .SendNotification("Not is possible get the supplier.",
+                        NotificationType.Error);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public string ValidateDocumentAndSupplierType(Supplier supplier)
+        {
+            if (supplier.SupplierType == SupplierType.PhysicalPerson && !IdentifierValidator.CPFIsValid(supplier.Document))
+            {
+                return "CPF is invalid. Please try again.";
+            }
+            else if (supplier.SupplierType == SupplierType.LegalPerson && !IdentifierValidator.CNPJIsValid(supplier.Document))
+            {
+                return "CNPJ is invalid. Please try again.";
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 }
