@@ -15,12 +15,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => 
-    options.SignIn.RequireConfirmedAccount = true)
+    options.SignIn.RequireConfirmedAccount = false)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Supplier>, SupplierRepository>();
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Report>, ReportRepository>();
@@ -45,8 +45,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 app.MapControllerRoute(
     name: "default",

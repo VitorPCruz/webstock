@@ -1,6 +1,6 @@
 ﻿@if (TempData.ContainsKey("notification"))
 {
-    var notification = Notification.Unserialize(TempData["notification"].ToString());
+    var notification = Notification.ReadNotification(TempData["notification"].ToString());
 
     @if(notification.Type == NotificationType.Error) {
         <div class="alert alert-danger mt-3 alert-dismissible fade show" role="alert">

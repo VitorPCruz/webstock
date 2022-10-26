@@ -49,7 +49,7 @@ namespace WebStock.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["notification"] = Notification
-                    .ToSerial("Please, check the fields.", NotificationType.Error);
+                    .SendNotification("Please, check the fields.", NotificationType.Error);
 
                 return RedirectToAction(nameof(Register));
             }
@@ -61,7 +61,7 @@ namespace WebStock.Controllers
                 supplier.Id = Guid.NewGuid();
                 _supplierRepository.AddEntity(supplier);
 
-                TempData["notification"] = Notification.ToSerial("Supplier registered.");
+                TempData["notification"] = Notification.SendNotification("Supplier registered.");
                 await _context.SaveChangesAsync();
             }
             
@@ -69,7 +69,7 @@ namespace WebStock.Controllers
             {
                 _supplierRepository.UpdateEntity(supplier);
 
-                TempData["notification"] = Notification.ToSerial("Supplier updated.");
+                TempData["notification"] = Notification.SendNotification("Supplier updated.");
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
@@ -93,11 +93,11 @@ namespace WebStock.Controllers
             if (supplier != null)
             {
                 _context.Suppliers.Remove(supplier);
-                TempData["notification"] = Notification.ToSerial("Supplier removed.");
+                TempData["notification"] = Notification.SendNotification("Supplier removed.");
             }
             else 
             {
-                TempData["notification"] = Notification.ToSerial("Not is possible get the supplier.", 
+                TempData["notification"] = Notification.SendNotification("Not is possible get the supplier.", 
                     NotificationType.Error);
             }
 

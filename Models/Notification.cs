@@ -13,10 +13,10 @@ public class Notification
         Type = type;
     }
 
-    public static string ToSerial(string message, 
+    public static string SendNotification(string message, 
         NotificationType type = NotificationType.Info) => 
             JsonConvert.SerializeObject(new Notification(message, type));
 
-    public static Notification Unserialize(string message) =>
+    public static Notification ReadNotification(string message) =>
         JsonConvert.DeserializeObject<Notification>(message);
 }

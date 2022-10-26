@@ -8,9 +8,9 @@ namespace WebStock.Controllers
     public class CategoriesController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private readonly IRepository<Category> _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(ApplicationDbContext context, IRepository<Category> repository)
+        public CategoriesController(ApplicationDbContext context, ICategoryRepository repository)
         {
             _context = context;
             _categoryRepository = repository;
@@ -37,30 +37,34 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["notification"] = Notification.ToSerial("Please, chech the fields.", NotificationType.Warning);
+                TempData["notification"] = Notification.SendNotification("Please, chech the fields.", NotificationType.Warning);
                 return View(category);
             }
 
             var register = await _categoryRepository.GetEntityById(category.Id);
+            var nameExists = await _categoryRepository.CheckIfCategoryExists(category.Name);
 
             if (register == null)
             {
+                if (nameExists)
+                {
+                    TempData["notification"] = Notification.SendNotification("This name exists. Try other name.", NotificationType.Warning);
+                    return View();
+                }
+
                 category.Id = Guid.NewGuid();
                 _categoryRepository.AddEntity(category);
-                
+                TempData["notification"] = Notification.SendNotification("Category created.");
                 await _context.SaveChangesAsync();
-                
-                TempData["notification"] = Notification.ToSerial("Category created.");
-
             }
 
             if (!category.Equals(register) && register != null)
             {
                 _categoryRepository.UpdateEntity(category);
+                TempData["notification"] = Notification.SendNotification("Category updated.");
                 await _context.SaveChangesAsync();
-                
-                TempData["notification"] = Notification.ToSerial("Category updated.");
             }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -83,16 +87,22 @@ namespace WebStock.Controllers
             if (category != null)
             {
                 _categoryRepository.DeleteEntityById(id);
-                TempData["notification"] = Notification.ToSerial("Category removed.");
+                TempData["notification"] = Notification.SendNotification("Category removed.");
             }
             else
             {
-                TempData["notification"] = Notification.ToSerial("Not is possible get the category.", NotificationType.Error);
+                TempData["notification"] = Notification.SendNotification("Not is possible get the category.", NotificationType.Error);
                 return RedirectToAction(nameof(Index));
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private Category CategoryTreatment(Category category)
+        {
+            category.Name.ToUpper().Trim().TrimEnd().TrimStart();
+            return category;
         }
     }
 }

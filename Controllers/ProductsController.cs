@@ -55,7 +55,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["notification"] = Notification.ToSerial("Please, check the fields.", NotificationType.Warning);
+                TempData["notification"] = Notification.SendNotification("Please, check the fields.", NotificationType.Warning);
                 return View(product);
             }
 
@@ -68,7 +68,7 @@ namespace WebStock.Controllers
 
             DefineAvailableEntities();
 
-            TempData["notification"] = Notification.ToSerial("New product created.", NotificationType.Success);
+            TempData["notification"] = Notification.SendNotification("New product created.", NotificationType.Success);
             return RedirectToAction(nameof(Index));
         }
 
@@ -92,7 +92,7 @@ namespace WebStock.Controllers
 
             if (!ModelState.IsValid)
             {
-                TempData["notification "] = Notification.ToSerial(
+                TempData["notification "] = Notification.SendNotification(
                     "Please, check the fields.", NotificationType.Warning);
 
                 return View(product);
@@ -107,7 +107,7 @@ namespace WebStock.Controllers
                 operation = Operation.Added;
                 difference = product.Quantity - oldProduct.Quantity;
 
-                TempData["notification"] = Notification.ToSerial(
+                TempData["notification"] = Notification.SendNotification(
                     $"Added x{difference} of {product.Name}.", NotificationType.Success);
             }
             else if (product.Quantity < oldProduct.Quantity)
@@ -115,7 +115,7 @@ namespace WebStock.Controllers
                 operation = Operation.Removed;
                 difference = oldProduct.Quantity - product.Quantity;
 
-                TempData["notification"] = Notification.ToSerial(
+                TempData["notification"] = Notification.SendNotification(
                     $"Removed x{difference} of {product.Name}.", NotificationType.Success);
             }
             else
@@ -132,7 +132,7 @@ namespace WebStock.Controllers
                 _reportRepository.AddEntity(report);
 
             if (!product.Equals(oldProduct))
-                TempData["notification"] = Notification.ToSerial("Product updated.", NotificationType.Success);
+                TempData["notification"] = Notification.SendNotification("Product updated.", NotificationType.Success);
 
             await _context.SaveChangesAsync();
 
@@ -160,7 +160,7 @@ namespace WebStock.Controllers
 
             await _context.SaveChangesAsync();
 
-            TempData["notification"] = Notification.ToSerial("Product removed.");
+            TempData["notification"] = Notification.SendNotification("Product removed.");
             return RedirectToAction(nameof(Index));
         }
 
