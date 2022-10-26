@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
 
 namespace WebStock.Controllers
 {
+    [Authorize]
     public class CategoriesController : BaseController
     {
         private readonly ApplicationDbContext _context;
@@ -78,7 +80,6 @@ namespace WebStock.Controllers
             return View(category);
         }
 
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -97,12 +98,6 @@ namespace WebStock.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private Category CategoryTreatment(Category category)
-        {
-            category.Name.ToUpper().Trim().TrimEnd().TrimStart();
-            return category;
         }
     }
 }

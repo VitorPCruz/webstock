@@ -5,7 +5,7 @@ using WebStock.Models;
 
 namespace WebStock.Repository;
 
-public class ProductRepository : Repository<Product>, IRepository<Product>
+public class ProductRepository : Repository<Product>, IProductRepository
 {
     public ProductRepository(ApplicationDbContext dbcontext) : base(dbcontext) 
     { }

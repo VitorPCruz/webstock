@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebStock.Data;
 using WebStock.Interfaces;
@@ -6,25 +7,24 @@ using WebStock.Models;
 
 namespace WebStock.Controllers
 {
+    [Authorize]
     public class ProductsController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private readonly IRepository<Product> _productRepository;
-        private readonly IRepository<Supplier> _supplierRepository;
-        private readonly IRepository<Category> _categoryRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ISupplierRepository _supplierRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IRepository<Report> _reportRepository;
 
-        public ProductsController(ApplicationDbContext context,
-                                  IRepository<Product> productRepository,
-                                  IRepository<Category> categoryRepository,
-                                  IRepository<Report> reportRepository,
-                                  IRepository<Supplier> supplierRepository)
+        public ProductsController(ApplicationDbContext context, IProductRepository productRepository, 
+            ISupplierRepository supplierRepository, ICategoryRepository categoryRepository, 
+            IRepository<Report> reportRepository)
         {
             _context = context;
             _productRepository = productRepository;
+            _supplierRepository = supplierRepository;
             _categoryRepository = categoryRepository;
             _reportRepository = reportRepository;
-            _supplierRepository = supplierRepository;
         }
 
         public async Task<IActionResult> Index()

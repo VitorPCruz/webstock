@@ -4,7 +4,7 @@ using WebStock.Models;
 
 namespace WebStock.Repository;
 
-public class SupplierRepository : Repository<Supplier>, IRepository<Supplier>
+public class SupplierRepository : Repository<Supplier>, ISupplierRepository
 {
     public SupplierRepository(ApplicationDbContext dbcontext) : base(dbcontext)
     { }

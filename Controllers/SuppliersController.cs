@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
 using WebStock.Interfaces;
@@ -6,12 +7,13 @@ using WebStock.Models;
 
 namespace WebStock.Controllers
 {
+    [Authorize]
     public class SuppliersController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private readonly IRepository<Supplier> _supplierRepository;
+        private readonly ISupplierRepository _supplierRepository;
 
-        public SuppliersController(ApplicationDbContext context, IRepository<Supplier> repository)
+        public SuppliersController(ApplicationDbContext context, ISupplierRepository repository)
         {
             _context = context;
             _supplierRepository = repository;
