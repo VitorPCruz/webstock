@@ -26,6 +26,11 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRepository<Report>, ReportRepository>();
 
 
+builder.Services.AddControllersWithViews()
+    .AddRazorPagesOptions(options => {
+        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+    });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -49,7 +54,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.MapRazorPages();
 

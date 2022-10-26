@@ -7,7 +7,7 @@ using WebStock.Repository;
 
 namespace WebStock.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class HomeController : BaseController
 {
     private readonly ILogger<HomeController> _logger;
@@ -19,15 +19,10 @@ public class HomeController : BaseController
         _reportRepository = reportRepository;
     }
 
-    [AllowAnonymous]
+    [Route("Home")]
     public async Task<IActionResult> Index()
     {
         return View("../Reports/Index", await _reportRepository.GetAllEntities());
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
