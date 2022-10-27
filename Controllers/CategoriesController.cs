@@ -39,7 +39,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["notification"] = Notification.SendNotification("Please, chech the fields.", NotificationType.Warning);
+                SendNotification("Please, chech the fields.", NotificationType.Warning);
                 return View(category);
             }
 
@@ -50,21 +50,21 @@ namespace WebStock.Controllers
             {
                 if (nameExists)
                 {
-                    TempData["notification"] = Notification.SendNotification("This name exists. Try other name.", NotificationType.Warning);
+                    SendNotification("This name exists. Try other name.", NotificationType.Warning);
                     return View();
                 }
 
                 category.Id = Guid.NewGuid();
-                _categoryRepository.AddEntity(category);
-                TempData["notification"] = Notification.SendNotification("Category created.");
+                await _categoryRepository.AddEntity(category);
                 await _context.SaveChangesAsync();
+                SendNotification("Category created.", NotificationType.Success);
             }
 
             if (!category.Equals(register) && register != null)
             {
-                _categoryRepository.UpdateEntity(category);
-                TempData["notification"] = Notification.SendNotification("Category updated.");
+                await _categoryRepository.UpdateEntity(category);
                 await _context.SaveChangesAsync();
+                SendNotification("Category updated.", NotificationType.Success);
             }
 
             return RedirectToAction(nameof(Index));
@@ -87,16 +87,15 @@ namespace WebStock.Controllers
 
             if (category != null)
             {
-                _categoryRepository.DeleteEntityById(id);
-                TempData["notification"] = Notification.SendNotification("Category removed.");
+                await _categoryRepository.DeleteEntityById(id);
+                await _context.SaveChangesAsync();
+                SendNotification("Category removed.", NotificationType.Success);
             }
             else
             {
-                TempData["notification"] = Notification.SendNotification("Not is possible get the category.", NotificationType.Error);
-                return RedirectToAction(nameof(Index));
+                SendNotification("Not is possible get the category.", NotificationType.Error);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }
