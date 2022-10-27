@@ -35,7 +35,6 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     public virtual async Task DeleteEntityById(Guid id)
     {
         _dbSet.Remove(new TEntity { Id = id });
-
     }
 
     public virtual async Task UpdateEntity(TEntity entity)

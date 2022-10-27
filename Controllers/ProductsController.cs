@@ -52,17 +52,21 @@ namespace WebStock.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
+
         {
             if (!ModelState.IsValid)
             {
                 SendNotification("Please, check the fields.", NotificationType.Warning);
+                GetCategoriesEnabled();
+                GetSuppliersEnabled();
                 return View(product);
             }
 
             if (product.Quantity < 1)
             {
-                SendNotification("Can not possible register product with 0 products.",
-                    NotificationType.Warning);
+                SendNotification("Can not possible register product with 0 products.", NotificationType.Warning);
+                GetCategoriesEnabled();
+                GetSuppliersEnabled();
                 return View(product);
             }
 
@@ -70,7 +74,6 @@ namespace WebStock.Controllers
 
             await _productRepository.AddEntity(product);
             await _reportRepository.AddEntity(new Report(product, Operation.Added, product.Quantity, 0));
-
             await _context.SaveChangesAsync();
 
             GetCategoriesEnabled();
@@ -101,29 +104,30 @@ namespace WebStock.Controllers
 
             if (!ModelState.IsValid)
             {
-                SendNotification("Please, check the fields.", 
-                    NotificationType.Warning);
-
+                SendNotification("Please, check the fields.", NotificationType.Warning);
                 return View(product);
             }
 
             var oldProduct = await _productRepository.GetEntityById(id);
             var difference = 0;
+            string message;
             Operation operation;
 
             if (product.Quantity > oldProduct.Quantity)
             {
                 operation = Operation.Added;
                 difference = product.Quantity - oldProduct.Quantity;
+                message = $"Added x{difference} of {product.Name}.";
 
-                SendNotification($"Added x{difference} of {product.Name}.", NotificationType.Success);
+                SendNotification(message, NotificationType.Success);
             }
             else if (product.Quantity < oldProduct.Quantity)
             {
                 operation = Operation.Removed;
                 difference = oldProduct.Quantity - product.Quantity;
+                message = $"Removed x{difference} of {product.Name}.";
 
-                SendNotification($"Removed x{difference} of {product.Name}.", NotificationType.Success);
+                SendNotification(message, NotificationType.Success);
             }
             else
             {
@@ -148,15 +152,6 @@ namespace WebStock.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var product = await _productRepository.GetEntityById(id);
-
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -164,20 +159,20 @@ namespace WebStock.Controllers
             var product = await _productRepository.GetEntityById(id);
             string message;
 
-            if (product.Quantity > 0)
-            {
-                message = $"Not is possible delete the product {product.Name} because it has x{product.Quantity} on stock. Remove them before delete the product.";
-
-                SendNotification(message, NotificationType.Warning);
-                return RedirectToAction(nameof(Index));
-            }
-
             if (product != null)
-                await _productRepository.DeleteEntityById(product.Id);
-
-            await _context.SaveChangesAsync();
-
-            SendNotification("Product removed.", NotificationType.Success);
+            {
+                if (product.Quantity > 0)
+                {
+                    message = $"Not is possible delete the product {product.Name} because it has x{product.Quantity} on stock. Remove them before delete the product.";
+                    SendNotification(message, NotificationType.Warning);
+                }
+                else
+                { 
+                    _productRepository.DeleteEntityById(product.Id);
+                    await _context.SaveChangesAsync();
+                    SendNotification("Product removed.", NotificationType.Success);
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
