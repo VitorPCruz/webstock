@@ -101,10 +101,10 @@ namespace WebStock.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var supplier = await _context.Suppliers.FindAsync(id);
+            var supplier = await _supplierRepository.GetEntityById(id);
             if (supplier != null)
             {
-                await _supplierRepository.DeleteEntityById(supplier.Id);
+                _supplierRepository.DeleteEntityById(supplier.Id);
                 await _context.SaveChangesAsync();
                 SendNotification("Supplier removed.");
             }

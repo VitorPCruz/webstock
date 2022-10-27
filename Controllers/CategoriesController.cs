@@ -87,7 +87,7 @@ namespace WebStock.Controllers
 
             if (category != null)
             {
-                await _categoryRepository.DeleteEntityById(id);
+                _categoryRepository.DeleteEntityById(id);
                 await _context.SaveChangesAsync();
                 SendNotification("Category removed.", NotificationType.Success);
             }

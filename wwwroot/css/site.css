@@ -18,7 +18,7 @@ body {
 }
 
 a {
-    text-decoration: none; /* no underline */
+    text-decoration: none !important; /* no underline */
 }
 
 .ModelDescription {
@@ -35,13 +35,12 @@ a {
 }
 
 .fa-circle-check {
-    color: rgb(62, 170, 15);
+    color: rgb(0, 148, 255);
 }
 
 .fa-circle-xmark {
-    color: rgb(215, 3, 3);
+    color: rgb(222, 68, 0);
 }
-
 
 .title {
     font-size: 35px;
@@ -51,4 +50,17 @@ a {
 .auth {
     margin-left: auto;
     margin-right: auto;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    text-decoration: none;
+}
+
+.fa-heart {
+    color: rgb(225, 81, 55);
 }

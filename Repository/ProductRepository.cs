@@ -21,6 +21,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     {
         return await _dbSet.Include(p => p.Category)
             .Include(p => p.Supplier)
+            .OrderBy(p => p.Name)
             .ToListAsync();
     }
 
