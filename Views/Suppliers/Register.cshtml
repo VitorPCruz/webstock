@@ -6,7 +6,8 @@
 <p class="title">@ViewData["Title"]</p>
 
 <hr />
-<div class="row">
+<p>Use a valid CPF/CNPJ to register Physical/Legal Person</p>
+ <div class="row">
     <div class="col-md-5">
         <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -43,7 +44,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
+                <input type="submit" value="Register" class="btn btn-success" />
                 <a asp-action="Index" class="btn btn-dark">Back to List</a>
             </div>
         </form>

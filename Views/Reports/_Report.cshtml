@@ -13,9 +13,9 @@
             <th scope="col">Name</th>
             <th scope="col">Product Code</th>
             <th scope="col">Operation</th>
-            <th scope="col" class="columnsAlignEnd">Qnt Op.</th>
-            <th scope="col" class="columnsAlignEnd">Before Op.</th>
-            <th scope="col" class="columnsAlignEnd">After Oper.</th>
+            <th scope="col">Qnt Op.</th>
+            <th scope="col">Before Op.</th>
+            <th scope="col">After Oper.</th>
         </tr>
     </thead>
     <tbody>
@@ -26,14 +26,10 @@
                 <td>@item.ProductName</td>
                 <td>@item.ProductCode</td>
                 <td>@item.Operation</td>
-                <td class="columnsAlignEnd">@item.OperationQuantity</td>
-                <td class="columnsAlignEnd">@item.BeforeOperation</td>
-                <td class="columnsAlignEnd">@item.AfterOperation</td>
+                <td>@item.OperationQuantity</td>
+                <td>@item.BeforeOperation</td>
+                <td>@item.AfterOperation</td>
             </tr>
         }
     </tbody>
 </table>
-
-<script>
-    swal("Here's the title!", "...and here's the text!");
-</script>

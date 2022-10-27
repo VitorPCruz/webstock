@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
-using System.Data.Common;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
@@ -34,8 +28,7 @@ namespace WebStock.Controllers
         {
             var supplier = await _supplierRepository.GetEntityById(id);
 
-            if (supplier == null)
-                return NotFound();
+            if (supplier == null) return NotFound();
 
             return View(supplier);
         }
@@ -44,8 +37,7 @@ namespace WebStock.Controllers
         {
             var register = await _supplierRepository.GetEntityById(id);
 
-            if (register == null)
-                return View();
+            if (register == null) return View();
 
             return View(register);
         }
@@ -56,9 +48,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["notification"] = Notification
-                    .SendNotification("Please, check the fields.", NotificationType.Error);
-
+                SendNotification("Please, check the fields.", NotificationType.Error);
                 return RedirectToAction(nameof(Register));
             }
 
@@ -66,36 +56,33 @@ namespace WebStock.Controllers
 
             if (message.Length > 0)
             {
-                TempData["notification"] = Notification
-                    .SendNotification(message, NotificationType.Error);
-
+                SendNotification(message, NotificationType.Error);
                 return RedirectToAction(nameof(Register));
             }
 
             var register = await _supplierRepository.GetEntityById(supplier.Id);
-            
-            if (await _supplierRepository.CheckDocument(supplier.Document))
-            {
-                TempData["notification"] = Notification
-                    .SendNotification("A same document already registered.", NotificationType.Warning);
-                return RedirectToAction(nameof(Register));
-            }
 
             if (register == null)
             {
-                supplier.Id = Guid.NewGuid();
-                _supplierRepository.AddEntity(supplier);
+                if (await _supplierRepository.CheckDocument(supplier.Document))
+                {
+                    SendNotification("A same document already registered.", NotificationType.Warning);
+                    return RedirectToAction(nameof(Register));
+                }
 
-                TempData["notification"] = Notification.SendNotification("Supplier registered.");
+                supplier.Id = Guid.NewGuid();
+                await _supplierRepository.AddEntity(supplier);
                 await _context.SaveChangesAsync();
+                
+                SendNotification("Supplier registered.", NotificationType.Success);
             }
 
             if (register != null && !supplier.Equals(register))
             {
-                _supplierRepository.UpdateEntity(supplier);
-
-                TempData["notification"] = Notification.SendNotification("Supplier updated.");
+                await _supplierRepository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
+                
+                SendNotification("Supplier updated.", NotificationType.Success);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -117,18 +104,14 @@ namespace WebStock.Controllers
             var supplier = await _context.Suppliers.FindAsync(id);
             if (supplier != null)
             {
-                _context.Suppliers.Remove(supplier);
-                TempData["notification"] = Notification
-                    .SendNotification("Supplier removed.");
+                await _supplierRepository.DeleteEntityById(supplier.Id);
+                await _context.SaveChangesAsync();
+                SendNotification("Supplier removed.");
             }
             else
             {
-                TempData["notification"] = Notification
-                    .SendNotification("Not is possible get the supplier.",
-                        NotificationType.Error);
+                SendNotification("Not is possible get the supplier.", NotificationType.Error);
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

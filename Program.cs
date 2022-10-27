@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
@@ -24,12 +25,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRepository<Report>, ReportRepository>();
-
-
-//builder.Services.AddControllersWithViews()
-//    .AddRazorPagesOptions(options => {
-//        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-//    });
 
 var app = builder.Build();
 

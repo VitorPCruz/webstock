@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStock.Interfaces;
 using WebStock.Models;
-using WebStock.Repository;
 
 namespace WebStock.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class HomeController : BaseController
 {
     private readonly ILogger<HomeController> _logger;
@@ -21,7 +20,7 @@ public class HomeController : BaseController
 
     public async Task<IActionResult> Index()
     {
-        return View("../Reports/Index", await _reportRepository.GetAllEntities());
+        return View(await _reportRepository.GetAllEntities());
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
