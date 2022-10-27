@@ -37,7 +37,7 @@ public class Product : Entity
     public bool Active { get; set; }
 
     [Required(ErrorMessage = "The field '{0}' is required")]
-    [Range(minimum: 1, maximum: int.MaxValue)]
+    [Range(minimum: 0, maximum: int.MaxValue)]
     public int Quantity { get; set; }
     
     public Supplier? Supplier { get; set; }

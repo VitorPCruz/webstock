@@ -44,8 +44,8 @@ namespace WebStock.Controllers
 
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories.Where(x => x.Active == true), "Id", "Name");
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers.Where(x => x.Active == true), "Id", "Name");
+            GetCategoriesEnabled();
+            GetSuppliersEnabled();
             return View();
         }
 
@@ -55,7 +55,14 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["notification"] = Notification.SendNotification("Please, check the fields.", NotificationType.Warning);
+                SendNotification("Please, check the fields.", NotificationType.Warning);
+                return View(product);
+            }
+
+            if (product.Quantity < 1)
+            {
+                SendNotification("Can not possible register product with 0 products.",
+                    NotificationType.Warning);
                 return View(product);
             }
 
@@ -66,9 +73,10 @@ namespace WebStock.Controllers
 
             await _context.SaveChangesAsync();
 
-            DefineAvailableEntities();
+            GetCategoriesEnabled();
+            GetSuppliersEnabled();
+            SendNotification("New product created.", NotificationType.Success);
 
-            TempData["notification"] = Notification.SendNotification("New product created.", NotificationType.Success);
             return RedirectToAction(nameof(Index));
         }
 
@@ -79,7 +87,8 @@ namespace WebStock.Controllers
             if (product == null) 
                 return NotFound();
 
-            DefineAvailableEntities();
+            GetCategoriesEnabled();
+            GetSuppliersEnabled();
             return View(product);
         }
 
@@ -92,8 +101,8 @@ namespace WebStock.Controllers
 
             if (!ModelState.IsValid)
             {
-                TempData["notification "] = Notification.SendNotification(
-                    "Please, check the fields.", NotificationType.Warning);
+                SendNotification("Please, check the fields.", 
+                    NotificationType.Warning);
 
                 return View(product);
             }
@@ -107,16 +116,14 @@ namespace WebStock.Controllers
                 operation = Operation.Added;
                 difference = product.Quantity - oldProduct.Quantity;
 
-                TempData["notification"] = Notification.SendNotification(
-                    $"Added x{difference} of {product.Name}.", NotificationType.Success);
+                SendNotification($"Added x{difference} of {product.Name}.", NotificationType.Success);
             }
             else if (product.Quantity < oldProduct.Quantity)
             {
                 operation = Operation.Removed;
                 difference = oldProduct.Quantity - product.Quantity;
 
-                TempData["notification"] = Notification.SendNotification(
-                    $"Removed x{difference} of {product.Name}.", NotificationType.Success);
+                SendNotification($"Removed x{difference} of {product.Name}.", NotificationType.Success);
             }
             else
             {
@@ -126,17 +133,18 @@ namespace WebStock.Controllers
 
             var report = new Report(product, operation, difference, oldProduct.Quantity);
 
-            _productRepository.UpdateEntity(product);
+            await _productRepository.UpdateEntity(product);
 
             if (difference > 0)
-                _reportRepository.AddEntity(report);
+                await _reportRepository.AddEntity(report);
 
             if (!product.Equals(oldProduct))
-                TempData["notification"] = Notification.SendNotification("Product updated.", NotificationType.Success);
+                SendNotification("Product updated.", NotificationType.Success);
 
             await _context.SaveChangesAsync();
 
-            DefineAvailableEntities();
+            GetCategoriesEnabled();
+            GetSuppliersEnabled();
             return RedirectToAction(nameof(Index));
         }
 
@@ -154,20 +162,33 @@ namespace WebStock.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var product = await _productRepository.GetEntityById(id);
+            string message;
+
+            if (product.Quantity > 0)
+            {
+                message = $"Not is possible delete the product {product.Name} because it has x{product.Quantity} on stock. Remove them before delete the product.";
+
+                SendNotification(message, NotificationType.Warning);
+                return RedirectToAction(nameof(Index));
+            }
 
             if (product != null)
-                _context.Products.Remove(product);
+                await _productRepository.DeleteEntityById(product.Id);
 
             await _context.SaveChangesAsync();
 
-            TempData["notification"] = Notification.SendNotification("Product removed.");
+            SendNotification("Product removed.", NotificationType.Success);
             return RedirectToAction(nameof(Index));
         }
 
-        private void DefineAvailableEntities()
+        private void GetCategoriesEnabled()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories.Where(x => x.Active == true), "Id", "Name");
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers.Where(x => x.Active == true), "Id", "Name");
+            ViewData["CategoryId"] = _categoryRepository.GetCategoriesEnabled();
+        }
+
+        private void GetSuppliersEnabled()
+        {
+            ViewData["SupplierId"] = _supplierRepository.GetSuppliersEnabled();
         }
     }
 }

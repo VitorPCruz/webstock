@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WebStock.Data;
 using WebStock.Interfaces;
 using WebStock.Models;
@@ -22,5 +23,10 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
             return false;
 
         return true;
+    }
+
+    public SelectList GetCategoriesEnabled()
+    {
+        return new SelectList(_dbcontext.Categories.AsNoTracking().Where(x => x.Active), "Id", "Name");
     }
 }

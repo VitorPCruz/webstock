@@ -26,10 +26,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRepository<Report>, ReportRepository>();
 
 
-builder.Services.AddControllersWithViews()
-    .AddRazorPagesOptions(options => {
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
-    });
+//builder.Services.AddControllersWithViews()
+//    .AddRazorPagesOptions(options => {
+//        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+//    });
 
 var app = builder.Build();
 
