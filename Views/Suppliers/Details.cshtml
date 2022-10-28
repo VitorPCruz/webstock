@@ -57,7 +57,7 @@
             Quer editar este registro?
         </dt>
         <dd class="col-sm-8 align-middle">
-            <a asp-action="Register" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+            <a asp-action="Register" asp-route-id="@Model?.Id" class="btn btn-success">Editar</a>
         </dd>
         <dt class="col-sm-4 align-middle">
             Quer remover este registro?
@@ -65,7 +65,7 @@
         <dd class="col-sm-8 align-middle">
             <form asp-action="Delete">
                 <input type="hidden" asp-for="Id" />
-                <input type="submit" value="Delete" alt="Remover" class="btn btn-danger" >
+                <button type="submit" value="Delete" class="btn btn-danger">Remover</button>
             </form>
         </dd>
         <dt class="col-sm-4 align-middle">
