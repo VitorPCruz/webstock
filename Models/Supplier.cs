@@ -7,25 +7,27 @@ namespace WebStock.Models;
 
 public class Supplier : Entity
 {
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(200, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
+    [DisplayName("Nome")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(200, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 3)]
     public string Name { get; set; }
 
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(18, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 14)]
+    [DisplayName("CPF/CNPJ")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(18, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 14)]
     public string Document { get; set; }
 
     [DisplayName("E-mail")]
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [EmailAddress(ErrorMessage = "Insert a valid e-mail")]
-    [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 5)]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [EmailAddress(ErrorMessage = "Insira um e-mail válido")]
+    [StringLength(100, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 5)]
     public string Email { get; set; }
 
-    [DisplayName("Supplier Type")]
-    [Required(ErrorMessage = "The field '{0}' is required")]
+    [DisplayName("Tipo de Fornecedor")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
     public SupplierType SupplierType { get; set; }
 
-    [DisplayName("Active?")]
+    [DisplayName("Ativo?")]
     public bool Active { get; set; }
 
     public IEnumerable<Product> Products { get; set; }

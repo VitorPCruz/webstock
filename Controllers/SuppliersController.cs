@@ -48,7 +48,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SendNotification("Please, check the fields.", NotificationType.Error);
+                SendNotification("Por favor, verifique os campos novamente.", NotificationType.Error);
                 return RedirectToAction(nameof(Register));
             }
 
@@ -66,7 +66,7 @@ namespace WebStock.Controllers
             {
                 if (await _supplierRepository.CheckDocument(supplier.Document))
                 {
-                    SendNotification("A same document already registered.", NotificationType.Warning);
+                    SendNotification("Este CPF/CNPJ já está cadastrado.", NotificationType.Warning);
                     return RedirectToAction(nameof(Register));
                 }
 
@@ -74,7 +74,7 @@ namespace WebStock.Controllers
                 await _supplierRepository.AddEntity(supplier);
                 await _context.SaveChangesAsync();
                 
-                SendNotification("Supplier registered.", NotificationType.Success);
+                SendNotification("Fornecedor Registrado.", NotificationType.Success);
             }
 
             if (register != null && !supplier.Equals(register))
@@ -82,7 +82,7 @@ namespace WebStock.Controllers
                 await _supplierRepository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
                 
-                SendNotification("Supplier updated.", NotificationType.Success);
+                SendNotification("Fornecedor atualizado.", NotificationType.Success);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -106,11 +106,11 @@ namespace WebStock.Controllers
             {
                 _supplierRepository.DeleteEntityById(supplier.Id);
                 await _context.SaveChangesAsync();
-                SendNotification("Supplier removed.");
+                SendNotification("Fornecedor removido.");
             }
             else
             {
-                SendNotification("Not is possible get the supplier.", NotificationType.Error);
+                SendNotification("Não é possível obter o Fornecedor.", NotificationType.Error);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -119,11 +119,11 @@ namespace WebStock.Controllers
         {
             if (supplier.SupplierType == SupplierType.PhysicalPerson && !IdentifierValidator.CPFIsValid(supplier.Document))
             {
-                return "CPF is invalid. Please try again.";
+                return "CPF inváldio. Tente novamente.";
             }
             else if (supplier.SupplierType == SupplierType.LegalPerson && !IdentifierValidator.CNPJIsValid(supplier.Document))
             {
-                return "CNPJ is invalid. Please try again.";
+                return "CNPJ inváldio. Tente novamente.";
             }
             else
             {

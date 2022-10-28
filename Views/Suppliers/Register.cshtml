@@ -6,7 +6,9 @@
 <p class="title">@ViewData["Title"]</p>
 
 <hr />
-<p>Use a valid CPF/CNPJ to register Physical/Legal Person</p>
+<p>Use um CPF/CNPJ válido para registrar uma Pessoa Física/Jurídica</p>
+<p>Formatos Válidos: CPF(123.456.789-10) / CNPJ(12.345.678/0001-23)</p>
+
  <div class="row">
     <div class="col-md-5">
         <form asp-action="Register">
@@ -29,9 +31,9 @@
             <div class="form-group">
                 <label asp-for="SupplierType" class="control-label"></label>
                 <select asp-for="SupplierType" class="form-select" asp-items="ViewBag.SupplierType">
-                    <option value="select">Select a option</option>
-                    <option value="1">Phisical Person</option>
-                    <option value="2">Legal Person</option>
+                    <option value="select">Selecione uma opção</option>
+                    <option value="1">Pessoa Física</option>
+                    <option value="2">Pessoa Jurídica</option>
                 </select>
                 <span asp-validation-for="SupplierType" class="text-danger"></span>
             </div>

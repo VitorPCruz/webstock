@@ -64,3 +64,22 @@ a {
 .fa-heart {
     color: rgb(225, 81, 55);
 }
+
+.box-login {
+    width: 50px;
+    height: 50px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.box-nav {
+    margin: 0px 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.register {
+    font-size: 50px;
+    margin: 0px;
+    padding: 0px;
+}

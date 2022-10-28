@@ -39,7 +39,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SendNotification("Please, chech the fields.", NotificationType.Warning);
+                SendNotification("Por favor, verifique os campos novamente.", NotificationType.Warning);
                 return View(category);
             }
 
@@ -50,21 +50,21 @@ namespace WebStock.Controllers
             {
                 if (nameExists)
                 {
-                    SendNotification("This name exists. Try other name.", NotificationType.Warning);
+                    SendNotification("Este nome já existe. Tente outro nome.", NotificationType.Warning);
                     return View();
                 }
 
                 category.Id = Guid.NewGuid();
                 await _categoryRepository.AddEntity(category);
                 await _context.SaveChangesAsync();
-                SendNotification("Category created.", NotificationType.Success);
+                SendNotification("Categoria criada.", NotificationType.Success);
             }
 
             if (!category.Equals(register) && register != null)
             {
                 await _categoryRepository.UpdateEntity(category);
                 await _context.SaveChangesAsync();
-                SendNotification("Category updated.", NotificationType.Success);
+                SendNotification("Categoria atualizada.", NotificationType.Success);
             }
 
             return RedirectToAction(nameof(Index));
@@ -89,11 +89,11 @@ namespace WebStock.Controllers
             {
                 _categoryRepository.DeleteEntityById(id);
                 await _context.SaveChangesAsync();
-                SendNotification("Category removed.", NotificationType.Success);
+                SendNotification("Categoria removida.", NotificationType.Success);
             }
             else
             {
-                SendNotification("Not is possible get the category.", NotificationType.Error);
+                SendNotification("Não é possível obter a categoria.", NotificationType.Error);
             }
 
             return RedirectToAction(nameof(Index));

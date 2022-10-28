@@ -1,29 +1,29 @@
 ﻿@model WebStock.Models.Product
 
 <div>
-    <h4>Product</h4>
+    <h4>Registro de Produto</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            Name:
+            Nome
         </dt>
         <dd class = "col-sm-10">
             @Model.Name
         </dd>
         <dt class = "col-sm-2">
-            Code Bar:
+            Código de Barras
         </dt>
         <dd class = "col-sm-10">
             @Model.CodeBar
         </dd>
         <dt class = "col-sm-2">
-            Product Code:
+            Código de Produtos
         </dt>
         <dd class = "col-sm-10">
             @Model.ProductCode
         </dd>
         <dt class = "col-sm-2">
-            Description:
+            Descrição
         </dt>
         <dd class = "col-sm-10">
             @if (Model.Description != null)
@@ -32,11 +32,11 @@
             }
             else
             {
-                <span>Without description</span>
+                <span>Sem descrição</span>
             }
         </dd>
         <dt class = "col-sm-2">
-            Is Active?
+            Ativo?
         </dt>
         <dd class = "col-sm-10">
             @if (Model.Active == true)
@@ -49,13 +49,13 @@
             }
         </dd>
         <dt class = "col-sm-2">
-            Quantity Ava.:
+            Quantidade Disp.
         </dt>
         <dd class = "col-sm-10">
             @Model.Quantity
         </dd>
         <dt class = "col-sm-2">
-            Supplier Name:
+            Fornecedor
         </dt>
         <dd class = "col-sm-10">
             @if (Model.Supplier != null)
@@ -64,11 +64,11 @@
             }
             else
             {
-                <span>Without category</span>
+                <span>Sem categoria.</span>
             }
         </dd>
         <dt class = "col-sm-2">
-            Category Name:
+            Categoria
         </dt>
         <dd class = "col-sm-10">
             @if (Model.Category != null)
@@ -77,23 +77,23 @@
             }
             else
             {
-                <span>Without category</span>
+                <span>Sem fornecedor.</span>
             }
         </dd>
     </dl>
 </div>
 <hr />
-<h4>Actions</h4>
+<h4>Ações</h4>
 <div>
     <dl class="row">
         <dt class="col-sm-4 align-middle">
-            Do you want edit the register?
+            Você quer editar este registro?
         </dt>
         <dd class="col-sm-8 align-middle">
-            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
         </dd>
         <dt class="col-sm-4 align-middle">
-            Do you want delete the register?
+            Você quer remover este registro?
         </dt>
         <dd class="col-sm-8 align-middle">
             <form asp-action="Delete">
@@ -102,10 +102,10 @@
             </form>
         </dd>
         <dt class="col-sm-4 align-middle">
-            Return to index?
+            Retornar à lista?
         </dt>
         <dd class="col-sm-8 align-middle">
-            <a asp-action="Index" class="btn btn-dark">Back to List</a>
+            <a asp-action="Index" class="btn btn-dark">Voltar</a>
         </dd>
     </dl>
 </div>

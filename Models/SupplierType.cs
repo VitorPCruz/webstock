@@ -4,9 +4,9 @@ namespace WebStock.Models;
 
 public enum SupplierType
 {
-    [Display(Name = "Physical Person")]
+    [Display(Name = "Pessoa Física")]
     PhysicalPerson=1,
 
-    [Display(Name = "Legal Person")]
+    [Display(Name = "Pessoa Jurídica")]
     LegalPerson = 2
 }

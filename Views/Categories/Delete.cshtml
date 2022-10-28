@@ -1,23 +1,23 @@
 ﻿@model WebStock.Models.Category
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Remover";
 }
 
 <p class="title">@Model.Name</p>
 
-<h4>Are you sure you want to delete @Model.Name?</h4>
+<h4>Deseja remover @Model.Name?</h4>
 <div>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            Name
+            Nome
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            Active?
+            Ativo?
         </dt>
         <dd class="col-sm-10">
             @if (Model.Active == true) {

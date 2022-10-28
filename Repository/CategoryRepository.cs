@@ -13,7 +13,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
 
     public override async Task<List<Category>> GetAllEntities()
     {
-        return await _dbSet.OrderByDescending(x => x.Name).ToListAsync();
+        return await _dbSet.OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<bool> CheckIfCategoryExists(string name)

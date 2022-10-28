@@ -1,35 +1,35 @@
 ﻿@model IEnumerable<WebStock.Models.Supplier>
 
 @{
-    ViewData["Title"] = "Suppliers";
+    ViewData["Title"] = "Fornecedores";
 }
 
-<p class="title">List of Suppliers</p>
+<p class="title">Lista de @ViewData["Title"]</p>
 <hr />
 <div>
     <h4>
-        @ViewData["Title"] Registered: @Model.Count()
+        @ViewData["Title"] cadastrados: @Model.Count()
     </h4>
 </div>
 <p>
-    <a asp-action="Register" class="btn btn-success">New Supplier</a>
+    <a asp-action="Register" class="btn btn-success">Novo Fornecedor</a>
 </p>
 <table class="table table-hover table-striped table-bordered table-sm">
     <thead class="table-dark">
         <tr>
             <th>
-                Name
+                Nome
             </th>
             <th>
-                Document
+                Documento
             </th>
             <th>
                 E-mail
             </th>
             <th class="text-center">
-                Active?
+                Ativo?
             </th>
-            <th class="text-center">Actions</th>
+            <th class="text-center">Ações</th>
         </tr>
     </thead>
     <tbody>

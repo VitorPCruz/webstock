@@ -55,7 +55,7 @@ namespace WebStock.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SendNotification("Please, check the fields.", NotificationType.Warning);
+                SendNotification("Por favor, verifique os campos novamente.", NotificationType.Warning);
                 GetCategoriesEnabled();
                 GetSuppliersEnabled();
                 return View(product);
@@ -63,7 +63,7 @@ namespace WebStock.Controllers
 
             if (product.Quantity < 1)
             {
-                SendNotification("Can not possible register product with 0 products.", NotificationType.Warning);
+                SendNotification("Não é possível registrar um produto com 0 de quantidade.", NotificationType.Warning);
                 GetCategoriesEnabled();
                 GetSuppliersEnabled();
                 return View(product);
@@ -77,7 +77,7 @@ namespace WebStock.Controllers
 
             GetCategoriesEnabled();
             GetSuppliersEnabled();
-            SendNotification("New product created.", NotificationType.Success);
+            SendNotification("Produto criado.", NotificationType.Success);
 
             return RedirectToAction(nameof(Index));
         }
@@ -103,7 +103,7 @@ namespace WebStock.Controllers
 
             if (!ModelState.IsValid)
             {
-                SendNotification("Please, check the fields.", NotificationType.Warning);
+                SendNotification("Por favor, verifique os campos novamente.", NotificationType.Warning);
                 return View(product);
             }
 
@@ -116,7 +116,7 @@ namespace WebStock.Controllers
             {
                 operation = Operation.Added;
                 difference = product.Quantity - oldProduct.Quantity;
-                message = $"Added x{difference} of {product.Name}.";
+                message = $"Adicionado x{difference} de {product.Name}.";
 
                 SendNotification(message, NotificationType.Success);
             }
@@ -124,7 +124,7 @@ namespace WebStock.Controllers
             {
                 operation = Operation.Removed;
                 difference = oldProduct.Quantity - product.Quantity;
-                message = $"Removed x{difference} of {product.Name}.";
+                message = $"Removido x{difference} de {product.Name}.";
 
                 SendNotification(message, NotificationType.Success);
             }
@@ -142,7 +142,7 @@ namespace WebStock.Controllers
                 await _reportRepository.AddEntity(report);
 
             if (!product.Equals(oldProduct))
-                SendNotification("Product updated.", NotificationType.Success);
+                SendNotification("Produto atualizado.", NotificationType.Success);
 
             await _context.SaveChangesAsync();
 
@@ -162,14 +162,14 @@ namespace WebStock.Controllers
             {
                 if (product.Quantity > 0)
                 {
-                    message = $"Not is possible delete the product {product.Name} because it has x{product.Quantity} on stock. Remove them before delete the product.";
+                    message = $"Não é possível remover o produto {product.Name} pois existem x{product.Quantity} cadastrados no estoque. Remova-os antes de prosseguir.";
                     SendNotification(message, NotificationType.Warning);
                 }
                 else
                 { 
                     _productRepository.DeleteEntityById(product.Id);
                     await _context.SaveChangesAsync();
-                    SendNotification("Product removed.", NotificationType.Success);
+                    SendNotification("Produto removido.", NotificationType.Success);
                 }
             }
             return RedirectToAction(nameof(Index));

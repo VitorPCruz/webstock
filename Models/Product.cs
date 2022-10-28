@@ -8,36 +8,39 @@ namespace WebStock.Models;
 
 public class Product : Entity
 {
-    [DisplayName("Supplier")]
+    [DisplayName("Fornecedor")]
     [ForeignKey("Supplier")]
     public Guid? SupplierId { get; set; }
 
-    [DisplayName("Category")]
+    [DisplayName("Categoria")]
     [ForeignKey("Category")]
     public Guid? CategoryId { get; set; }
 
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
+    [DisplayName("Nome")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(100, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 3)]
     public string Name { get; set; }
 
-    [DisplayName("Code Bar")]
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(35, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 3)]
+    [DisplayName("Código de Barras")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(35, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 3)]
     public string CodeBar { get; set; }
 
-    [DisplayName("Product Code")]
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(50, ErrorMessage = "The field '{0}' must be between {2} and {1} characters", MinimumLength = 1)]
+    [DisplayName("Código do Produto")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(50, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.", MinimumLength = 1)]
     public string ProductCode { get; set; }
 
-    [StringLength(1000, ErrorMessage = "The field '{0}' must be even {1} characters")]
+    [DisplayName("Descrição")]
+    [StringLength(1000, ErrorMessage = "O campo '{0}' deve ter até {1} caracteres.")]
     public string? Description { get; set; }
 
-    [DisplayName("Active?")]
+    [DisplayName("Ativo?")]
     public bool Active { get; set; }
 
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [Range(minimum: 0, maximum: int.MaxValue)]
+    [DisplayName("Quantidade")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.")]
     public int Quantity { get; set; }
     
     public Supplier? Supplier { get; set; }

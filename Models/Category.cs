@@ -6,12 +6,13 @@ namespace WebStock.Models;
 
 public class Category : Entity
 {
-    [Required(ErrorMessage = "The field '{0}' is required")]
-    [StringLength(100, ErrorMessage = "The field '{0}' must be between {2} and {1} characters",
+    [DisplayName("Nome")]
+    [Required(ErrorMessage = "O campo '{0}' é necessário.")]
+    [StringLength(100, ErrorMessage = "O campo '{0}' precisa ter entre {2} e {1} caracteres.",
         MinimumLength = 2)]
     public string Name { get; set; }
 
-    [DisplayName("Active?")]
+    [DisplayName("Ativo?")]
     public bool Active { get; set; }
 
     public override bool Equals(object obj)
