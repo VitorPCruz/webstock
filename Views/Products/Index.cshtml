@@ -48,7 +48,14 @@
                     @Html.DisplayFor(modelItem => item.ProductCode)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Supplier.Name)
+                    @if(item.SupplierId != null)
+                    {
+                        <span>@item.Supplier.Name</span>
+                    }
+                    else
+                    {
+                        <span>Sem fornecedor</span>
+                    }
                 </td>
                 <td class="text-center">
                     @if(item.Active == true)

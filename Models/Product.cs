@@ -57,8 +57,6 @@ public class Product : Entity
                ProductCode == product.ProductCode &&
                Description == product.Description &&
                Active == product.Active &&
-               Quantity == product.Quantity &&
-               EqualityComparer<Supplier>.Default.Equals(Supplier, product.Supplier) &&
-               EqualityComparer<Category>.Default.Equals(Category, product.Category);
+               Quantity == product.Quantity;
     }
 }

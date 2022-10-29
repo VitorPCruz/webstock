@@ -91,6 +91,7 @@ namespace WebStock.Controllers
 
             GetCategoriesEnabled();
             GetSuppliersEnabled();
+
             return View(product);
         }
 
@@ -104,6 +105,8 @@ namespace WebStock.Controllers
             if (!ModelState.IsValid)
             {
                 SendNotification("Por favor, verifique os campos novamente.", NotificationType.Warning);
+                GetCategoriesEnabled();
+                GetSuppliersEnabled();
                 return View(product);
             }
 
@@ -116,25 +119,26 @@ namespace WebStock.Controllers
             {
                 operation = Operation.Added;
                 difference = product.Quantity - oldProduct.Quantity;
-                message = $"Adicionado x{difference} de {product.Name}.";
-
-                SendNotification(message, NotificationType.Success);
+                message = $" Adicionado x{difference}.";
             }
             else if (product.Quantity < oldProduct.Quantity)
             {
                 operation = Operation.Removed;
                 difference = oldProduct.Quantity - product.Quantity;
-                message = $"Removido x{difference} de {product.Name}.";
-
-                SendNotification(message, NotificationType.Success);
+                message = $" Removido x{difference}.";
             }
             else
             {
                 operation = Operation.Updated;
                 difference = 0;
+                message = "";
             }
 
             var report = new Report(product, operation, difference, oldProduct.Quantity);
+
+            product.SupplierId = oldProduct.SupplierId;
+            product.CategoryId = oldProduct.CategoryId;
+
 
             await _productRepository.UpdateEntity(product);
 
@@ -142,7 +146,7 @@ namespace WebStock.Controllers
                 await _reportRepository.AddEntity(report);
 
             if (!product.Equals(oldProduct))
-                SendNotification("Produto atualizado.", NotificationType.Success);
+                SendNotification($"Produto {product.Name} atualizado.{message}", NotificationType.Success);
 
             await _context.SaveChangesAsync();
 
@@ -167,7 +171,7 @@ namespace WebStock.Controllers
                 }
                 else
                 { 
-                    _productRepository.DeleteEntityById(product.Id);
+                    _productRepository.RemoveProduct(product);
                     await _context.SaveChangesAsync();
                     SendNotification("Produto removido.", NotificationType.Success);
                 }

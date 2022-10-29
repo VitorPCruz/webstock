@@ -25,6 +25,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
             .ToListAsync();
     }
 
+
     public async Task<Product> GetProductByProductCode(string productCode)
     {
         return await _dbSet.FirstOrDefaultAsync(x => x.ProductCode == productCode);
@@ -34,5 +35,10 @@ public class ProductRepository : Repository<Product>, IProductRepository
     {
         return await _dbSet.AsNoTracking()
             .FirstOrDefaultAsync(x => x.CodeBar == codeBar);
+    }
+
+    public async Task RemoveProduct(Product product)
+    {
+        _dbcontext.Products.Remove(product);
     }
 }
