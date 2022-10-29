@@ -32,4 +32,9 @@ public class SupplierRepository : Repository<Supplier>, ISupplierRepository
     {
         return new SelectList(_dbcontext.Suppliers.AsNoTracking().Where(x => x.Active), "Id", "Name");
     }
+
+    public async Task<Supplier> GetSupplierByDocument(Supplier supplier)
+    {
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Document == supplier.Document);
+    }
 }

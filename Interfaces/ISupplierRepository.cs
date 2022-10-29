@@ -7,4 +7,6 @@ public interface ISupplierRepository : IRepository<Supplier>
 {
     Task<bool> CheckDocument(string document);
     SelectList GetSuppliersEnabled();
+
+    Task<Supplier> GetSupplierByDocument(Supplier supplier);
 }

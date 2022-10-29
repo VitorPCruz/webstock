@@ -79,6 +79,15 @@ namespace WebStock.Controllers
 
             if (register != null && !supplier.Equals(register))
             {
+                var supplierRegistered = await _supplierRepository.GetSupplierByDocument(supplier);
+                var documentCheck = await _supplierRepository.CheckDocument(supplier.Document);
+
+                if (documentCheck && supplier.Id != supplierRegistered.Id)
+                {
+                    SendNotification("Este CPF/CNPJ já está cadastrado.", NotificationType.Warning);
+                    return RedirectToAction(nameof(Register));
+                }
+
                 await _supplierRepository.UpdateEntity(supplier);
                 await _context.SaveChangesAsync();
                 

@@ -4,7 +4,6 @@
     ViewData["Title"] = "Cadastro";
 }
 
-
 <div class="row">
     <div class="col-md-5 auth">
         <div class="text-center">
@@ -12,7 +11,7 @@
         </div>
         <h1 class="text-center">@ViewData["Title"]</h1>
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2 class="text-center">Crie uma nova conta local.</h2>
+            <h3 class="text-center">Crie uma nova conta local.</h3>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
@@ -30,7 +29,7 @@
                 <label asp-for="Input.ConfirmPassword">Confirmar Senha</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-success">Registrar</button>
         </form>
     </div>
 </div>
