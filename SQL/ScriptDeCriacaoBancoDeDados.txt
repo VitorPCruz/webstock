@@ -1,0 +1,143 @@
+﻿CREATE DATABASE webstockprod;
+
+USE webstockprod;
+
+CREATE TABLE [AspNetRoles] (
+    [Id] varchar(100) NOT NULL,
+    [Name] varchar(256) NULL,
+    [NormalizedName] varchar(256) NULL,
+    [ConcurrencyStamp] varchar(100) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [AspNetUsers] (
+    [Id] varchar(100) NOT NULL,
+    [UserName] varchar(256) NULL,
+    [NormalizedUserName] varchar(256) NULL,
+    [Email] varchar(256) NULL,
+    [NormalizedEmail] varchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] varchar(100) NULL,
+    [SecurityStamp] varchar(100) NULL,
+    [ConcurrencyStamp] varchar(100) NULL,
+    [PhoneNumber] varchar(100) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [Categories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] varchar(100) NOT NULL,
+    [Active] bit NOT NULL,
+    CONSTRAINT [PK_Categories] PRIMARY KEY ([Id])
+);
+
+
+
+CREATE TABLE [Reports] (
+    [Id] uniqueidentifier NOT NULL,
+    [ProductId] uniqueidentifier NOT NULL,
+    [ProductName] varchar(100) NULL,
+    [ProductCode] varchar(100) NULL,
+    [Moment] datetime2 NOT NULL,
+    [Operation] int NOT NULL,
+    [OperationQuantity] int NOT NULL,
+    [BeforeOperation] int NOT NULL,
+    [AfterOperation] int NOT NULL,
+    CONSTRAINT [PK_Reports] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [Suppliers] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] varchar(200) NOT NULL,
+    [Document] varchar(18) NOT NULL,
+    [Email] varchar(100) NOT NULL,
+    [SupplierType] int NOT NULL,
+    [Active] bit NOT NULL,
+    CONSTRAINT [PK_Suppliers] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] varchar(100) NOT NULL,
+    [ClaimType] varchar(100) NULL,
+    [ClaimValue] varchar(100) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] varchar(100) NOT NULL,
+    [ClaimType] varchar(100) NULL,
+    [ClaimValue] varchar(100) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] varchar(128) NOT NULL,
+    [ProviderKey] varchar(128) NOT NULL,
+    [ProviderDisplayName] varchar(100) NULL,
+    [UserId] varchar(100) NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] varchar(100) NOT NULL,
+    [RoleId] varchar(100) NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] varchar(100) NOT NULL,
+    [LoginProvider] varchar(128) NOT NULL,
+    [Name] varchar(128) NOT NULL,
+    [Value] varchar(100) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE [Products] (
+    [Id] uniqueidentifier NOT NULL,
+    [SupplierId] uniqueidentifier NULL,
+    [CategoryId] uniqueidentifier NULL,
+    [Name] varchar(100) NOT NULL,
+    [CodeBar] varchar(35) NOT NULL,
+    [ProductCode] varchar(50) NOT NULL,
+    [Description] varchar(1000) NULL,
+    [Active] bit NOT NULL,
+    [Quantity] int NOT NULL,
+    CONSTRAINT [PK_Products] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Products_Categories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [Categories] ([Id]) ON DELETE SET NULL,
+    CONSTRAINT [FK_Products_Suppliers_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Suppliers] ([Id]) ON DELETE SET NULL
+);
+
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+
+CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+
+CREATE INDEX [IX_Products_CategoryId] ON [Products] ([CategoryId]);
+
+CREATE INDEX [IX_Products_SupplierId] ON [Products] ([SupplierId]);
